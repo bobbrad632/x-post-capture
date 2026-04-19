@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
   "name": "X Post Capture",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Capture a post on X.com as an image and copy it to the clipboard.",
-  "permissions": ["activeTab", "clipboardWrite"],
-  "host_permissions": ["https://x.com/*", "https://twitter.com/*"],
+  "permissions": ["clipboardWrite"],
+  "host_permissions": ["https://x.com/*", "https://twitter.com/*", "<all_urls>"],
   "background": {
     "service_worker": "background.js"
   },
