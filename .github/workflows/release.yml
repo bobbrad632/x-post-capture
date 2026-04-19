@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Verify tag matches manifest version
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          VER=$(node -e "console.log(require('./src/manifest.json').version)")
+          if [ "$TAG" != "$VER" ]; then
+            echo "::error::Git tag ${GITHUB_REF_NAME} expects manifest version ${TAG}, but src/manifest.json has ${VER}. Bump the manifest and push again."
+            exit 1
+          fi
+
+      - name: Install and build
+        run: npm ci && npm run build
+
+      - name: Pack extension ZIP
+        run: npm run pack
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*.zip
+          generate_release_notes: true
+          fail_on_unmatched_files: true

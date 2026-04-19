@@ -5,7 +5,7 @@ Use this before publishing. Official policy and UI change over time; always conf
 ## Before you upload
 
 1. **Build a production ZIP**
-   - Run `npm run build` then `npm run pack`.
+   - Run `npm run build` then `npm run pack`, **or** use the **`x-post-capture-vVERSION.zip`** attached to [GitHub Releases](https://github.com/bobbrad632/x-post-capture/releases) (same artifact produced by CI).
    - Upload **`release/x-post-capture-vVERSION.zip`** (contents of `dist/` at the **root** of the ZIP — `manifest.json` must not be nested in a subfolder).
 
 2. **Manifest**
