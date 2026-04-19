@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>X Post Capture — preview</title>
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <header class="xpc-sp-head">
+      <h1 class="xpc-sp-title">Last capture</h1>
+      <p class="xpc-sp-sub">
+        The same PNG that was copied to your clipboard. Close this panel with Chrome’s
+        <span class="xpc-sp-kbd">×</span> on the side panel.
+      </p>
+    </header>
+    <div id="empty" class="xpc-sp-empty">
+      <p>No capture yet.</p>
+      <p class="xpc-sp-muted">Use <strong>Copy post</strong> on X — the image appears here and in your clipboard.</p>
+    </div>
+    <div id="frame" class="xpc-sp-frame hidden">
+      <img id="preview" class="xpc-sp-img" alt="Last copied post screenshot" />
+    </div>
+    <script src="sidepanel.js"></script>
+  </body>
+</html>

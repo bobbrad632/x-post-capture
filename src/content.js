@@ -24,6 +24,25 @@ async function copyPngToClipboard(blob) {
   await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
 }
 
+function blobToDataUrl(blob) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(String(r.result));
+    r.onerror = () => reject(new Error("Could not read image for preview"));
+    r.readAsDataURL(blob);
+  });
+}
+
+async function sendPreviewToSidePanel(blob) {
+  if (isExtensionContextDead()) return;
+  try {
+    const dataUrl = await blobToDataUrl(blob);
+    chrome.runtime.sendMessage({ type: "PREVIEW_CAPTURE", dataUrl }, () => void chrome.runtime.lastError);
+  } catch (e) {
+    console.warn("[x-post-capture] preview", e);
+  }
+}
+
 function loadImageFromDataUrl(dataUrl) {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -160,6 +179,7 @@ function ensureButton(article) {
 
       const blob = await capturePostElement(root);
       await copyPngToClipboard(blob);
+      await sendPreviewToSidePanel(blob);
 
       btn.textContent = "Copied!";
       setTimeout(() => {
@@ -203,3 +223,22 @@ const observer = new MutationObserver(() => {
 
 observer.observe(document.documentElement, { childList: true, subtree: true });
 scan();
+
+function ensurePreviewPanelOpener() {
+  if (document.getElementById("xpc-preview-opener")) return;
+  const b = document.createElement("button");
+  b.id = "xpc-preview-opener";
+  b.type = "button";
+  b.className = "xpc-preview-opener";
+  b.textContent = "Preview panel";
+  b.title = "Open the side panel to see your last copied post (same image as clipboard)";
+  b.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isExtensionContextDead()) return;
+    chrome.runtime.sendMessage({ type: "OPEN_SIDE_PANEL" }, () => void chrome.runtime.lastError);
+  });
+  document.body.appendChild(b);
+}
+
+ensurePreviewPanelOpener();

@@ -19,6 +19,10 @@ The Extension **does not** send your posts, screenshots, clipboard contents, or 
 
 Processing happens **locally** in your browser (extension scripts).
 
+### Side panel preview
+
+When you copy a post image, a copy of that image may be stored in the browser’s **`chrome.storage.session` area** so the optional **side panel** can display your **last** capture. This storage is **session-scoped** (typically cleared when you close the browser), is **not** used for sync across devices, and is **not** transmitted to us.
+
 ## Permissions
 
 - **Clipboard:** Used only to place the **image you requested** on the clipboard when you click **Copy post**.

@@ -37,6 +37,14 @@ if (perms.has("clipboardWrite")) {
   warnings.push('clipboardWrite: explain in listing why clipboard access is needed (copying the image).');
 }
 
+if (perms.has("storage")) {
+  warnings.push('storage: explain session preview (last capture in side panel only, not uploaded).');
+}
+
+if (perms.has("sidePanel")) {
+  warnings.push("sidePanel: describe optional preview panel next to the page.");
+}
+
 // Remote code check (heuristic)
 const bg = m.background?.service_worker ?? m.background;
 if (typeof bg === "string" && bg.includes("http")) {

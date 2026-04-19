@@ -28,3 +28,25 @@
   opacity: 0.5;
   cursor: wait;
 }
+
+/* Open side panel without a new capture */
+.xpc-preview-opener {
+  position: fixed;
+  right: 12px;
+  bottom: 88px;
+  z-index: 99999;
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(15, 20, 25, 0.92);
+  color: #e7e9ea;
+  font: 13px/1.2 system-ui, sans-serif;
+  padding: 8px 12px;
+  border-radius: 9999px;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+
+.xpc-preview-opener:hover {
+  background: rgba(29, 155, 240, 0.18);
+  border-color: rgba(29, 155, 240, 0.45);
+}

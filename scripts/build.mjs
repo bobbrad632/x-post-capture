@@ -24,6 +24,9 @@ const ctx = await esbuild.context({
 copyFileSync(join(root, "src", "manifest.json"), join(dist, "manifest.json"));
 copyFileSync(join(root, "src", "background.js"), join(dist, "background.js"));
 copyFileSync(join(root, "src", "content.css"), join(dist, "content.css"));
+copyFileSync(join(root, "src", "sidepanel.html"), join(dist, "sidepanel.html"));
+copyFileSync(join(root, "src", "sidepanel.css"), join(dist, "sidepanel.css"));
+copyFileSync(join(root, "src", "sidepanel.js"), join(dist, "sidepanel.js"));
 
 const iconsSrc = join(root, "src", "icons");
 const iconsDist = join(dist, "icons");

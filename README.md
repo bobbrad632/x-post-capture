@@ -31,6 +31,13 @@ Updates: download a newer release ZIP, replace the old folder (or unzip to a new
 
 Capture uses the browser’s **visible tab screenshot** cropped to the post, not a DOM re-draw, so the result matches the on-screen UI.
 
+### Side panel preview
+
+After a successful **Copy post**, the same PNG is still placed on the **clipboard**, and the extension also **stores it in memory** and opens Chrome’s **side panel** so you can see the image vertically beside the page.
+
+- **Close the panel** using Chrome’s normal side-panel close control (or collapse the side panel area).
+- **Open again without copying:** **pin** the extension to the toolbar if needed, then click its **icon** (opens the preview panel), or use the **Preview panel** floating button on X (bottom-right).
+
 ---
 
 ## Development (Node.js)
@@ -63,6 +70,8 @@ Master file: `src/icons/icon-128.png`. `npm run build` runs `npm run icons`, whi
 | **clipboardWrite** | Copy the PNG to your clipboard when you click **Copy post**. |
 | **Host access** `https://x.com/*`, `https://twitter.com/*` | Inject the button and read layout for cropping. |
 | **`<all_urls>`** | Required by Chrome for `chrome.tabs.captureVisibleTab` after the async steps (scroll + message) used for a pixel-accurate capture. **No browsing data is collected**; see [PRIVACY.md](PRIVACY.md). |
+| **sidePanel** | Show the optional vertical preview panel next to the page. |
+| **storage** (`session`) | Hold the **last copied image** only for preview in the side panel (cleared when the browser session ends; not synced to servers). |
 
 ## Chrome Web Store
 
