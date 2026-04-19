@@ -3,10 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "node scripts/build.mjs",
-    "watch": "node scripts/build.mjs --watch"
+    "icons": "node scripts/generate-icons.mjs",
+    "build": "npm run icons && node scripts/build.mjs",
+    "watch": "node scripts/build.mjs --watch",
+    "pack": "node scripts/pack.mjs",
+    "check:manifest": "node scripts/check-manifest.mjs"
   },
   "devDependencies": {
-    "esbuild": "^0.24.2"
+    "esbuild": "^0.24.2",
+    "archiver": "^7.0.1",
+    "sharp": "^0.33.5"
   }
 }

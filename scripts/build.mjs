@@ -1,5 +1,5 @@
 import * as esbuild from "esbuild";
-import { copyFileSync, mkdirSync, existsSync } from "fs";
+import { copyFileSync, cpSync, mkdirSync, existsSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
@@ -24,6 +24,13 @@ const ctx = await esbuild.context({
 copyFileSync(join(root, "src", "manifest.json"), join(dist, "manifest.json"));
 copyFileSync(join(root, "src", "background.js"), join(dist, "background.js"));
 copyFileSync(join(root, "src", "content.css"), join(dist, "content.css"));
+
+const iconsSrc = join(root, "src", "icons");
+const iconsDist = join(dist, "icons");
+if (existsSync(iconsSrc)) {
+  mkdirSync(iconsDist, { recursive: true });
+  cpSync(iconsSrc, iconsDist, { recursive: true });
+}
 
 if (watch) {
   await ctx.watch();
