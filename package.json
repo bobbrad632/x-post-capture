@@ -6,9 +6,6 @@
     "build": "node scripts/build.mjs",
     "watch": "node scripts/build.mjs --watch"
   },
-  "dependencies": {
-    "html2canvas": "^1.4.1"
-  },
   "devDependencies": {
     "esbuild": "^0.24.2"
   }
