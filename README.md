@@ -19,6 +19,8 @@ You only need **Google Chrome** (or another Chromium browser that supports unpac
 
 Updates: download a newer release ZIP, replace the old folder (or unzip to a new folder), then on `chrome://extensions` use **Reload** on the extension card, or remove the old extension and **Load unpacked** again pointing at the new folder.
 
+**“Extension context invalidated” / button shows “Refresh page”:** After you **reload** or **update** the extension, already-open X.com tabs still run an old copy of the script until you refresh. **Reload the tab** (F5 or the address-bar refresh) and use **Copy post** again.
+
 ---
 
 ## How it works

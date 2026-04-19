@@ -1,5 +1,21 @@
 const BTN_TEXT = "Copy post";
 const BTN_BUSY = "…";
+const MSG_RELOAD =
+  "Extension was reloaded or updated. Refresh this page (F5), then try again.";
+
+/** After an extension reload/update, old content scripts lose access to `chrome.runtime` until the tab is refreshed. */
+function isExtensionContextDead() {
+  try {
+    return !chrome.runtime?.id;
+  } catch {
+    return true;
+  }
+}
+
+function isInvalidatedMessage(msg) {
+  const s = String(msg ?? "");
+  return s.includes("Extension context invalidated") || s.includes("context invalidated");
+}
 
 async function copyPngToClipboard(blob) {
   if (!navigator.clipboard?.write) {
@@ -60,10 +76,14 @@ function cropCaptureToElement(img, rect, viewportWidth, viewportHeight) {
 }
 
 async function captureVisibleTabPng() {
+  if (isExtensionContextDead()) {
+    throw new Error(MSG_RELOAD);
+  }
   return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage({ type: "CAPTURE_VISIBLE_TAB" }, (res) => {
       if (chrome.runtime.lastError) {
-        reject(new Error(chrome.runtime.lastError.message));
+        const m = chrome.runtime.lastError.message;
+        reject(new Error(isInvalidatedMessage(m) ? MSG_RELOAD : m));
         return;
       }
       if (!res?.ok) {
@@ -134,6 +154,10 @@ function ensureButton(article) {
     btn.textContent = BTN_BUSY;
 
     try {
+      if (isExtensionContextDead()) {
+        throw new Error(MSG_RELOAD);
+      }
+
       const blob = await capturePostElement(root);
       await copyPngToClipboard(blob);
 
@@ -143,10 +167,13 @@ function ensureButton(article) {
       }, 1600);
     } catch (err) {
       console.error("[x-post-capture]", err);
-      btn.textContent = "Failed";
+      const reload = isInvalidatedMessage(err?.message);
+      btn.textContent = reload ? "Refresh page" : "Failed";
+      btn.title = reload ? MSG_RELOAD : "Copy screenshot of this post to clipboard";
       setTimeout(() => {
         btn.textContent = BTN_TEXT;
-      }, 2000);
+        btn.title = "Copy screenshot of this post to clipboard";
+      }, reload ? 5000 : 2000);
     } finally {
       btn.disabled = false;
       if (btn.textContent === BTN_BUSY) btn.textContent = prev;
