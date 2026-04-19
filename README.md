@@ -61,7 +61,7 @@ Maintainers: see **[docs/RELEASING.md](docs/RELEASING.md)** for tagging and auto
 
 ### Icons
 
-Master file: `src/icons/icon-128.png`. `npm run build` runs `npm run icons`, which generates `icon-16.png`, `icon-32.png`, and `icon-48.png` via [sharp](https://sharp.pixelplumbing.com/).
+Vector source: **`xpc.svg`** at the repo root. `npm run build` runs `npm run icons`, which rasterizes it to `src/icons/icon-{16,32,48,128}.png` via [sharp](https://sharp.pixelplumbing.com/). Change the artwork in `xpc.svg`, then run `npm run build` again.
 
 ## Permissions (why they exist)
 
