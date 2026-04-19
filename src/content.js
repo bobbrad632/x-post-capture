@@ -3,6 +3,13 @@ import html2canvas from "html2canvas";
 const BTN_TEXT = "Copy post";
 const BTN_BUSY = "…";
 
+async function copyPngToClipboard(blob) {
+  if (!navigator.clipboard?.write) {
+    throw new Error("Clipboard API is not available in this context");
+  }
+  await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+}
+
 function findTweetRoot(el) {
   return el?.closest?.('article[data-testid="tweet"]') ?? el?.closest?.("article[role='article']");
 }
@@ -50,26 +57,18 @@ function ensureButton(article) {
         useCORS: true,
         allowTaint: false,
         logging: false,
+        ignoreElements: (el) =>
+          el.tagName === "SCRIPT" || el.tagName === "IFRAME" || el.tagName === "NOSCRIPT",
+        onclone: (clonedDoc) => {
+          clonedDoc.querySelectorAll("script, iframe, noscript").forEach((n) => n.remove());
+        },
       });
 
-      const dataUrl = canvas.toDataURL("image/png");
-
-      const copied = await new Promise((resolve) => {
-        chrome.runtime.sendMessage(
-          { type: "COPY_IMAGE_DATA_URL", dataUrl },
-          (res) => {
-            if (chrome.runtime.lastError) {
-              resolve({ ok: false, error: chrome.runtime.lastError.message });
-              return;
-            }
-            resolve(res ?? { ok: false, error: "No response" });
-          }
-        );
+      const blob = await new Promise((resolve, reject) => {
+        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Could not encode image"))), "image/png");
       });
 
-      if (!copied.ok) {
-        throw new Error(copied.error || "Clipboard copy failed");
-      }
+      await copyPngToClipboard(blob);
 
       btn.textContent = "Copied!";
       setTimeout(() => {

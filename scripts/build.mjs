@@ -22,7 +22,6 @@ const ctx = await esbuild.context({
 });
 
 copyFileSync(join(root, "src", "manifest.json"), join(dist, "manifest.json"));
-copyFileSync(join(root, "src", "background.js"), join(dist, "background.js"));
 copyFileSync(join(root, "src", "content.css"), join(dist, "content.css"));
 
 if (watch) {
