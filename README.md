@@ -2,7 +2,7 @@
 
 Chrome extension for **x.com** / **twitter.com**: adds a **Copy post** button on each post. One click captures **what you actually see** (dark mode, fonts, quoted posts) as a **PNG** and copies it to the **clipboard** so you can paste it elsewhere.
 
-## Install from GitHub Releases (no Node.js)
+## Install from GitHub Releases 
 
 You only need **Google Chrome** (or another Chromium browser that supports unpacked extensions).
 
