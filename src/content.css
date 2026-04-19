@@ -1,0 +1,30 @@
+.xpc-capture-wrap {
+  display: inline-flex;
+  align-items: center;
+  margin-inline-start: 8px;
+  vertical-align: middle;
+}
+
+.xpc-capture-btn {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.2;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.xpc-capture-btn:hover {
+  background: rgba(29, 155, 240, 0.15);
+  border-color: rgba(29, 155, 240, 0.45);
+}
+
+.xpc-capture-btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
