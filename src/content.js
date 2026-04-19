@@ -1,5 +1,4 @@
-const BTN_TEXT = "Copy post";
-const BTN_BUSY = "…";
+const BTN_LABEL = "Copy post image to clipboard";
 const MSG_RELOAD =
   "Extension was reloaded or updated. Refresh this page (F5), then try again.";
 
@@ -31,6 +30,73 @@ function blobToDataUrl(blob) {
     r.onerror = () => reject(new Error("Could not read image for preview"));
     r.readAsDataURL(blob);
   });
+}
+
+/** Inline SVGs use currentColor — matches X light/dark icon rows. */
+function iconWrap(paths) {
+  return `<svg class="xpc-capture-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+}
+
+const ICONS = {
+  copy: iconWrap(
+    '<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>'
+  ),
+  check: iconWrap('<path d="M20 6L9 17l-5-5"/>'),
+  error: iconWrap('<path d="M18 6L6 18M6 6l12 12"/>'),
+  reload: iconWrap(
+    '<polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>'
+  ),
+};
+
+function setCopyButtonVisual(btn, state) {
+  btn.dataset.xpcState = state;
+  btn.classList.remove(
+    "xpc-capture-btn--busy",
+    "xpc-capture-btn--success",
+    "xpc-capture-btn--error",
+    "xpc-capture-btn--reload"
+  );
+
+  if (state === "idle") {
+    btn.innerHTML = ICONS.copy;
+    btn.title = BTN_LABEL;
+    btn.setAttribute("aria-label", BTN_LABEL);
+    btn.removeAttribute("aria-busy");
+    return;
+  }
+
+  btn.setAttribute("aria-busy", state === "busy" ? "true" : "false");
+
+  if (state === "busy") {
+    btn.innerHTML = ICONS.copy;
+    btn.classList.add("xpc-capture-btn--busy");
+    btn.title = "Copying…";
+    btn.setAttribute("aria-label", "Copying…");
+    return;
+  }
+
+  if (state === "success") {
+    btn.innerHTML = ICONS.check;
+    btn.classList.add("xpc-capture-btn--success");
+    btn.title = "Copied to clipboard";
+    btn.setAttribute("aria-label", "Copied to clipboard");
+    return;
+  }
+
+  if (state === "error") {
+    btn.innerHTML = ICONS.error;
+    btn.classList.add("xpc-capture-btn--error");
+    btn.title = "Copy failed — try again";
+    btn.setAttribute("aria-label", "Copy failed");
+    return;
+  }
+
+  if (state === "reload") {
+    btn.innerHTML = ICONS.reload;
+    btn.classList.add("xpc-capture-btn--reload");
+    btn.title = MSG_RELOAD;
+    btn.setAttribute("aria-label", "Extension updated — refresh the page");
+  }
 }
 
 async function sendPreviewToSidePanel(blob) {
@@ -159,8 +225,7 @@ function ensureButton(article) {
   const btn = document.createElement("button");
   btn.type = "button";
   btn.className = "xpc-capture-btn";
-  btn.textContent = BTN_TEXT;
-  btn.title = "Copy screenshot of this post to clipboard";
+  setCopyButtonVisual(btn, "idle");
 
   btn.addEventListener("click", async (e) => {
     e.preventDefault();
@@ -169,8 +234,7 @@ function ensureButton(article) {
     if (!root) return;
 
     btn.disabled = true;
-    const prev = btn.textContent;
-    btn.textContent = BTN_BUSY;
+    setCopyButtonVisual(btn, "busy");
 
     try {
       if (isExtensionContextDead()) {
@@ -181,22 +245,18 @@ function ensureButton(article) {
       await copyPngToClipboard(blob);
       await sendPreviewToSidePanel(blob);
 
-      btn.textContent = "Copied!";
-      setTimeout(() => {
-        btn.textContent = BTN_TEXT;
-      }, 1600);
+      setCopyButtonVisual(btn, "success");
+      setTimeout(() => setCopyButtonVisual(btn, "idle"), 1600);
     } catch (err) {
       console.error("[x-post-capture]", err);
       const reload = isInvalidatedMessage(err?.message);
-      btn.textContent = reload ? "Refresh page" : "Failed";
-      btn.title = reload ? MSG_RELOAD : "Copy screenshot of this post to clipboard";
-      setTimeout(() => {
-        btn.textContent = BTN_TEXT;
-        btn.title = "Copy screenshot of this post to clipboard";
-      }, reload ? 5000 : 2000);
+      setCopyButtonVisual(btn, reload ? "reload" : "error");
+      setTimeout(() => setCopyButtonVisual(btn, "idle"), reload ? 5000 : 2000);
     } finally {
       btn.disabled = false;
-      if (btn.textContent === BTN_BUSY) btn.textContent = prev;
+      if (btn.dataset.xpcState === "busy") {
+        setCopyButtonVisual(btn, "idle");
+      }
     }
   });
 

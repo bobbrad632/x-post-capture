@@ -1,6 +1,6 @@
 # X Post Capture
 
-Chrome extension for **x.com** / **twitter.com**: adds a **Copy post** button on each post. One click captures **what you actually see** (dark mode, fonts, quoted posts) as a **PNG** and copies it to the **clipboard** so you can paste it elsewhere.
+Chrome extension for **x.com** / **twitter.com**: adds a **copy** icon on each post (next to Reply / Like / Share). One click captures **what you actually see** (dark mode, fonts, quoted posts) as a **PNG** and copies it to the **clipboard** so you can paste it elsewhere.
 
 ## Install from GitHub Releases 
 
@@ -19,21 +19,21 @@ You only need **Google Chrome** (or another Chromium browser that supports unpac
 
 Updates: download a newer release ZIP, replace the old folder (or unzip to a new folder), then on `chrome://extensions` use **Reload** on the extension card, or remove the old extension and **Load unpacked** again pointing at the new folder.
 
-**“Extension context invalidated” / button shows “Refresh page”:** After you **reload** or **update** the extension, already-open X.com tabs still run an old copy of the script until you refresh. **Reload the tab** (F5 or the address-bar refresh) and use **Copy post** again.
+**“Extension context invalidated” / refresh icon:** After you **reload** or **update** the extension, already-open X.com tabs still run an old copy of the script until you refresh. **Reload the tab** (F5 or the address-bar refresh) and use the **copy** icon again.
 
 ---
 
 ## How it works
 
 1. Open a post or timeline on X.
-2. Click **Copy post** on the row with Reply / Repost / Like / Share.
-3. The button shows **Copied!** — paste the image (Ctrl+V / ⌘V) into chat, docs, or image editors.
+2. Click the **copy** icon (clipboard) on the row with Reply / Repost / Like / Share.
+3. The icon briefly shows a **checkmark** — paste the image (Ctrl+V / ⌘V) into chat, docs, or image editors.
 
 Capture uses the browser’s **visible tab screenshot** cropped to the post, not a DOM re-draw, so the result matches the on-screen UI.
 
 ### Side panel preview
 
-After a successful **Copy post**, the same PNG is still placed on the **clipboard**, and the extension also **stores it in memory** and opens Chrome’s **side panel** so you can see the image vertically beside the page.
+After a successful copy (**clipboard** icon), the same PNG is still placed on the **clipboard**, and the extension also **stores it in memory** and opens Chrome’s **side panel** so you can see the image vertically beside the page.
 
 - **Close the panel** using Chrome’s normal side-panel close control (or collapse the side panel area).
 - **Open again without copying:** **pin** the extension to the toolbar if needed, then click its **icon** (opens the preview panel), or use the **Preview panel** floating button on X (bottom-right).
@@ -67,7 +67,7 @@ Master file: `src/icons/icon-128.png`. `npm run build` runs `npm run icons`, whi
 
 | Permission | Reason |
 |------------|--------|
-| **clipboardWrite** | Copy the PNG to your clipboard when you click **Copy post**. |
+| **clipboardWrite** | Copy the PNG to your clipboard when you use the **copy** icon. |
 | **Host access** `https://x.com/*`, `https://twitter.com/*` | Inject the button and read layout for cropping. |
 | **`<all_urls>`** | Required by Chrome for `chrome.tabs.captureVisibleTab` after the async steps (scroll + message) used for a pixel-accurate capture. **No browsing data is collected**; see [PRIVACY.md](PRIVACY.md). |
 | **sidePanel** | Show the optional vertical preview panel next to the page. |

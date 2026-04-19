@@ -1,32 +1,80 @@
 .xpc-capture-wrap {
   display: inline-flex;
   align-items: center;
-  margin-inline-start: 8px;
+  margin-inline-start: 4px;
   vertical-align: middle;
 }
 
+/* Icon-only control — stroke uses currentColor so it follows X light/dark rows */
 .xpc-capture-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  margin: 0;
   appearance: none;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.06);
-  color: inherit;
-  font: inherit;
-  font-size: 13px;
-  line-height: 1.2;
-  padding: 4px 10px;
+  border: none;
   border-radius: 9999px;
+  background: transparent;
+  color: inherit;
   cursor: pointer;
-  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .xpc-capture-btn:hover {
-  background: rgba(29, 155, 240, 0.15);
-  border-color: rgba(29, 155, 240, 0.45);
+  background-color: color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.xpc-capture-btn:focus-visible {
+  outline: 2px solid color-mix(in srgb, currentColor 40%, transparent);
+  outline-offset: 2px;
 }
 
 .xpc-capture-btn:disabled {
-  opacity: 0.5;
+  opacity: 0.55;
   cursor: wait;
+}
+
+.xpc-capture-icon {
+  width: 18.75px;
+  height: 18.75px;
+  display: block;
+  pointer-events: none;
+}
+
+.xpc-capture-btn--busy .xpc-capture-icon {
+  animation: xpc-pulse 0.9s ease-in-out infinite;
+}
+
+@keyframes xpc-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.xpc-capture-btn--success {
+  color: rgb(0, 186, 124);
+}
+
+.xpc-capture-btn--error {
+  color: rgb(244, 33, 46);
+}
+
+.xpc-capture-btn--reload {
+  color: rgb(29, 155, 240);
+}
+
+/* Fallback hover when color-mix is unavailable */
+@supports not (background: color-mix(in srgb, currentColor 12%, transparent)) {
+  .xpc-capture-btn:hover {
+    background-color: rgba(128, 128, 128, 0.14);
+  }
 }
 
 /* Open side panel without a new capture */

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "X Post Capture",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "On X (Twitter), copy any post as a pixel-perfect PNG to your clipboard — same look as on screen, ready to paste elsewhere.",
   "minimum_chrome_version": "114",
   "permissions": ["clipboardWrite", "sidePanel", "storage"],

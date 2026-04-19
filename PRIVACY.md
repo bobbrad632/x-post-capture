@@ -6,7 +6,7 @@ This policy describes how the **X Post Capture** browser extension (“Extension
 
 ## What the Extension does
 
-The Extension adds a **Copy post** control on **x.com** and **twitter.com**. When you click it, the Extension:
+The Extension adds a **copy** control (clipboard icon) on **x.com** and **twitter.com**. When you activate it, the Extension:
 
 1. Scrolls the post into view as needed.
 2. Takes a **screenshot of the visible tab** using browser APIs.
@@ -25,7 +25,7 @@ When you copy a post image, a copy of that image may be stored in the browser’
 
 ## Permissions
 
-- **Clipboard:** Used only to place the **image you requested** on the clipboard when you click **Copy post**.
+- **Clipboard:** Used only to place the **image you requested** on the clipboard when you use the **copy** control.
 - **Site access / broad host permissions:** Required so the Extension can run on X/Twitter and so the browser can perform **tab capture** for an accurate image. This matches how Chromium’s extension APIs work for screenshot-based capture.
 
 ## Third parties
